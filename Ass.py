@@ -36,11 +36,11 @@ if __name__== "__main__":
     for w in tokens_All:
         if w not in count_Unigrams:
             count_Unigrams[w] = 1
-        count_Unigrams[w] += 1
+        else:
+            count_Unigrams[w] += 1
         
     
     print(count_Unigrams)                               #count of unigrams
-
 
     prob_Unigrams = {}
 
