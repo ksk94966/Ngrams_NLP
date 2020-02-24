@@ -1,13 +1,18 @@
+import sys
+import re
+
 if __name__== "__main__":
 
-    f = open(r"C:\Users\SAI KRISHNA\Desktop\UTD Imp docs\Sem 2\NLP\Assignment 2\NLP6320_POSTaggedTrainingSet-Windows.txt");
-    
+    path = sys.argv[1]    #for getting filename as argument
+    f = open(path,"r")
+    in_sent = sys.argv[2]
+
     #splitting sentence from the given data text file by stripping the trailing spaces
 
     corpus_Sentences = f.read().strip().split("\n")         #Step 1
     tokens_All = [];                                        #list for storing Unigrams
-    list_Bigrams_EachSent = {};                             #dict for storing unique bigrams
-    list_Bigrams_Combinations = {};                         #dict for storing all combinations of Bigrams
+    dict_Bigrams_EachSent = {};                             #dict for storing unique bigrams
+    dict_Bigrams_Combinations = {};                         #dict for storing all combinations of Bigrams
     for sentence in corpus_Sentences:
         temp_Sent_List = []
         token_sent = sentence.strip().split(" ")
@@ -18,45 +23,58 @@ if __name__== "__main__":
         for i in range(0,len(temp_Sent_List)):
             if(i<len(temp_Sent_List)-1):
                 s =temp_Sent_List[i] +" "+ temp_Sent_List[i+1]
-                if s not in list_Bigrams_EachSent:
-                    list_Bigrams_EachSent[s] = 1
+                if s not in dict_Bigrams_EachSent:
+                    dict_Bigrams_EachSent[s] = 1
                 else:
-                    list_Bigrams_EachSent[s] += 1
+                    dict_Bigrams_EachSent[s] += 1
             for j in range(0,len(temp_Sent_List)):
                 k = temp_Sent_List[i] +" "+ temp_Sent_List[j]
-                list_Bigrams_Combinations[k] = 0
+                dict_Bigrams_Combinations[k] = 0
                                     
 
-    print("Count of Bigrams:",len(list_Bigrams_EachSent))                     #Count of Bigrams_all 66517
-    print("Count of Bigrams Combinations:",len(list_Bigrams_Combinations))    #Count of All Bigrams Combinations 
+    #print("Count of Bigrams:",len(dict_Bigrams_EachSent))                     #Count of Bigrams_all 66517
+    #print("Count of Bigrams Combinations:",len(dict_Bigrams_Combinations))    #Count of All Bigrams Combinations 
 
     #print(tokens_All)
 
-    count_Unigrams = {}
+    dict_count_Unigrams = {}
 
     for w in tokens_All:
-        if w not in count_Unigrams:
-            count_Unigrams[w] = 1
+        if w not in dict_count_Unigrams:
+            dict_count_Unigrams[w] = 1
         else:
-            count_Unigrams[w] += 1                      #Storing Unigrams-count 
+            dict_count_Unigrams[w] += 1                      #Storing Unigrams-count 
 
-    print(count_Unigrams['as'])
+    #print(dict_count_Unigrams['as'])
 
-    for i in list_Bigrams_Combinations.keys():
-        if i in list_Bigrams_EachSent.keys():
-            list_Bigrams_Combinations[i] =  list_Bigrams_EachSent[i]          #Getting and storing counts of all Combinations
+    for i in dict_Bigrams_Combinations.keys():
+        if i in dict_Bigrams_EachSent.keys():
+            dict_Bigrams_Combinations[i] =  dict_Bigrams_EachSent[i]          #Getting and storing counts of all Combinations
 
-    print(max(list_Bigrams_Combinations.values()))
+    #print(max(dict_Bigrams_Combinations.values()))
 
-    print(list_Bigrams_Combinations['the plant'])
+    #print(dict_Bigrams_Combinations['the plant'])
     
     #Calculating the probabilities
 
     prob_Bigrams = {}
 
-    for i in list_Bigrams_Combinations.keys():
+    for i in dict_Bigrams_Combinations.keys():
         uni_str = i.split(" ")[0]
-        prob_Bigrams[i] = list_Bigrams_Combinations[i]/count_Unigrams[uni_str]
+        prob_Bigrams[i] = dict_Bigrams_Combinations[i]/dict_count_Unigrams[uni_str]
 
 
-    print(prob_Bigrams['as extensively'])   
+    #print(prob_Bigrams['as extensively'])   
+
+
+    in_sent = in_sent.lower().split()               #Calculating for the given sentence
+    prob_in = 1
+    for i in range(0, len(in_sent)-1):
+        if in_sent[i]+" "+in_sent[i+1] not in prob_Bigrams.keys():
+            #print("0")
+            prob_in *= 0
+        else:
+            #print(prob_Bigrams[in_sent[i]+" "+in_sent[i+1]])
+            prob_in *= prob_Bigrams[in_sent[i]+" "+in_sent[i+1]]
+    
+    print("Probability of given sentence for no smoothing:",prob_in)

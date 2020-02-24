@@ -1,10 +1,15 @@
+import sys
+import re
+
 if __name__== "__main__":
 
-    f = open(r"C:\Users\SAI KRISHNA\Desktop\UTD Imp docs\Sem 2\NLP\Assignment 2\NLP6320_POSTaggedTrainingSet-Windows.txt");
+    path = sys.argv[1]    #for getting filename as argument
+    f = open(path,"r")
+    in_sent = sys.argv[2]
     
     #splitting sentence from the given data text file by stripping the trailing spaces
 
-    corpus_Sentences = f.read().strip().split("\n")            #Step 1
+    corpus_Sentences = f.read().strip().split("\n")             #Step 1
 
     tokens_All = [];
     for sente in corpus_Sentences:
@@ -13,7 +18,7 @@ if __name__== "__main__":
             temp = x.strip().split("_")[0].lower()
             tokens_All.append(temp)                             #Step 2
     
-    print(tokens_All)                                           #Got all the token words from the given text file
+    #print(tokens_All)                                           #Got all the token words from the given text file
 
     #to get vocabulary we need to eliminate the duplicates
 
@@ -23,28 +28,37 @@ if __name__== "__main__":
         if i not in vocab_All: 
             vocab_All.append(i)
  
-    print(vocab_All);                                           #Got all the vocabulary
+    #print(vocab_All);                                         #Got all the vocabulary
 
-    print(len(tokens_All));                                     #count of tokens is 68737
-    print(len(vocab_All));                                      #count is vocabulary is 7602
+    #print(len(tokens_All));                                   #count of tokens is 68737
+    #print(len(vocab_All));                                    #count is vocabulary is 7602
 
 
     #Generating Unigrams
 
-    count_Unigrams = {}
+    dict_count_Unigrams = {}
 
     for w in tokens_All:
-        if w not in count_Unigrams:
-            count_Unigrams[w] = 1
+        if w not in dict_count_Unigrams:
+            dict_count_Unigrams[w] = 1
         else:
-            count_Unigrams[w] += 1
+            dict_count_Unigrams[w] += 1
         
     
-    print(count_Unigrams)                               #count of unigrams
+    #print(dict_count_Unigrams)                                   #dict of count of  unigrams
 
     prob_Unigrams = {}
 
-    for x in count_Unigrams:
-        prob_Unigrams[x] = count_Unigrams[x]/len(tokens_All)
+    for x in dict_count_Unigrams:
+        prob_Unigrams[x] = dict_count_Unigrams[x]/len(tokens_All)
     
-    print(prob_Unigrams);                               #probabilities of unigrams
+    #print(prob_Unigrams);                                   #probabilities of unigrams
+
+
+    in_sent = in_sent.lower().split()           #Calculating for the given sentence
+    prob_in = 1
+    for i in range(0, len(in_sent)):
+        #print(prob_Unigrams[in_sent[i]])
+        prob_in *= prob_Unigrams[in_sent[i]]
+    
+    print("Unigram probability for given sentence:",prob_in)
