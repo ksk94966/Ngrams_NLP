@@ -25,7 +25,7 @@ if __name__== "__main__":
  
     print(vocab_All);                                           #Got all the vocabulary
 
-    print(len(tokens_All));                                     #count od tokens is 68737
+    print(len(tokens_All));                                     #count of tokens is 68737
     print(len(vocab_All));                                      #count is vocabulary is 7602
 
 

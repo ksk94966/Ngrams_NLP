@@ -43,8 +43,8 @@ if __name__== "__main__":
     print(count_Unigrams['as'])
 
     for i in list_Bigrams_Combinations.keys():
-        if i in list_Bigrams_EachSent:
-            list_Bigrams_Combinations[i] += 1       #Getting and storing counts of all Combinations
+        if i in list_Bigrams_EachSent.keys():
+            list_Bigrams_Combinations[i] =  list_Bigrams_EachSent[i]       #Getting and storing counts of all Combinations
 
     print(list_Bigrams_Combinations['brainpower brainpower'])
     

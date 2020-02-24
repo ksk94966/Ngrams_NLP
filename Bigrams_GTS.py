@@ -25,38 +25,61 @@ if __name__== "__main__":
             for j in range(0,len(temp_Sent_List)):
                 k = temp_Sent_List[i] +" "+ temp_Sent_List[j]
                 list_Bigrams_Combinations[k] = 0
-                                    
 
-    print("Count of Bigrams:",len(list_Bigrams_EachSent))                     #Count of Bigrams_all 66517
-    print("Count of Bigrams Combinations:",len(list_Bigrams_Combinations))    #Count of All Bigrams Combinations 
 
-    #print(tokens_All)
-
-    count_Unigrams = {}
-
-    for w in tokens_All:
-        if w not in count_Unigrams:
-            count_Unigrams[w] = 1
-        else:
-            count_Unigrams[w] += 1                      #Storing Unigrams-count 
-
-    print(count_Unigrams['as'])
-
+        
     for i in list_Bigrams_Combinations.keys():
         if i in list_Bigrams_EachSent.keys():
             list_Bigrams_Combinations[i] =  list_Bigrams_EachSent[i]          #Getting and storing counts of all Combinations
 
-    print(max(list_Bigrams_Combinations.values()))
 
-    print(list_Bigrams_Combinations['the plant'])
+    buckets = {}                                       #dict for storing frequency values
+
+    for i in range(max(list_Bigrams_Combinations.values())+1):
+        buckets[i] = 0
+        for w in list_Bigrams_Combinations.keys():
+            if(list_Bigrams_Combinations[w]==i):
+                buckets[i] += 1
     
-    #Calculating the probabilities
+    buckets[len(buckets)] = 0                         #Storing the next count frequency as zero
 
-    prob_Bigrams = {}
+    print(len(buckets))
 
-    for i in list_Bigrams_Combinations.keys():
-        uni_str = i.split(" ")[0]
-        prob_Bigrams[i] = list_Bigrams_Combinations[i]/count_Unigrams[uni_str]
+    #Calcluating new counts based on good turing
+
+    list_Bigrams_GTD = {}
+
+    for k in list_Bigrams_Combinations.keys():
+        Nc = buckets[list_Bigrams_Combinations[k]]
+        Ncplus = buckets[list_Bigrams_Combinations[k]+1]
+        list_Bigrams_GTD[k] =  (list_Bigrams_Combinations[k]+1)*(Ncplus/Nc)
 
 
-    print(prob_Bigrams['as extensively'])   
+    print(len(list_Bigrams_GTD))
+
+
+    #Total seen pairs
+    N = 0
+    for i in range(1,len(buckets)):
+        N += i*buckets[i]
+
+    prob_Bigrams_GTD = {}
+
+    for k in list_Bigrams_GTD.keys():
+        prob_Bigrams_GTD[k] = list_Bigrams_GTD[k]/N
+
+    print(len(prob_Bigrams_GTD))
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
